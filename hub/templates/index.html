@@ -18,6 +18,15 @@
             font-size: 1.5rem;
             font-weight: bold;
         }
+         .footer {
+            background-color: #343a40;
+            padding: 20px 0;
+            color: #fff;
+        }
+        .footer .title {
+            font-weight: bold;
+            font-size: 1.2rem;
+        }
     </style>
 </head>
 <body>
@@ -60,7 +69,19 @@
             {% endfor %}
         </div>
     </div>
-
+    <footer class="footer">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-6">
+                <p>&copy; 2024 Thehub. All rights reserved.</p>
+            </div>
+            <div class="col-md-6">
+                <div class="title">thehub</div>
+                <p>The best meme collection gallery.</p>
+            </div>
+        </div>
+    </div>
+    </footer>
     <script>
     function share(imageName) {
         var shareOptions = document.getElementById('shareOptions');
