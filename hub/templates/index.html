@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+{% load static %}
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>thehub -Meme Gallery</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        .image-container {
+            margin-bottom: 20px;
+        }
+        .image-container img {
+            max-width: 100%;
+            height: auto;
+        }
+        .navbar-brand {
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+
+<nav class="navbar navbar-expand-lg navbar-light  fixed-top" style="background-color: #6c757d;">
+  <a class="navbar-brand" href="{% url 'homepage' %}"><span class="ml-2">the<span style="color: #ff4500;">hub</span></span></a>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+
+  <div class="collapse navbar-collapse" id="navbarSupportedContent">
+    <ul class="navbar-nav mr-auto">
+      <li class="nav-item active">
+        <a class="nav-link" href="{% url 'homepage' %}">Home <span class="sr-only">(current)</span></a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="#">Gallery</a>
+      </li>
+    </ul>
+      <ul class="navbar-nav ml-auto">
+      <li class="nav-item">
+        <a class="nav-link text-light d-md-inline" href="mailto:smemeshub@gmail.com?subject=Feedback%20for%20thehub">Feedback</a>
+      </li>
+      </ul>
+  </div>
+</nav>
+
+    <div class="container mt-5 pt-5">
+        <div class="row">
+            {% for image in images %}
+            <div class="col-lg-3 col-md-4 col-sm-6">
+                <div class="image-container">
+                    <img src="{% static 'images/' %}{{ image }}" class="img-fluid" alt="{{ image }}">
+                    <div class="mt-2">
+                        <a href="{% static 'images/' %}{{ image }}" download="{{ image }}" class="btn btn-primary btn-sm">Download</a>
+                        <button class="btn btn-secondary btn-sm" onclick="share('{{ image }}')">Share</button>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+
+    <script>
+    function share(imageName) {
+        var shareOptions = document.getElementById('shareOptions');
+        shareOptions.style.display = 'block';
+        var overlay = document.getElementById('overlay');
+        overlay.style.display = 'block';
+    }
+
+    function closeShareMenu() {
+        var shareOptions = document.getElementById('shareOptions');
+        shareOptions.style.display = 'none';
+        var overlay = document.getElementById('overlay');
+        overlay.style.display = 'none';
+    }
+
+    function shareOnFacebook(imageName) {
+        var facebookShareUrl = 'https://www.facebook.com/sharer/sharer.php?u=' + encodeURIComponent(window.location.href);
+        window.open(facebookShareUrl, '_blank');
+        closeShareMenu();
+    }
+
+    function shareOnWhatsApp(imageName) {
+        var whatsappShareUrl = 'whatsapp://send?text=' + encodeURIComponent('Check out this image: ' + imageName + ' ' + window.location.href);
+        window.location.href = whatsappShareUrl;
+        closeShareMenu();
+    }
+
+    function shareOnLinkedIn(imageName) {
+        var linkedinShareUrl = 'https://www.linkedin.com/shareArticle?mini=true&url=' + encodeURIComponent(window.location.href) + '&title=' + encodeURIComponent('Check out this image: ' + imageName);
+        window.open(linkedinShareUrl, '_blank');
+        closeShareMenu();
+    }
+
+    function shareOnMessenger(imageName) {
+        var messengerShareUrl = 'fb-messenger://share/?link=' + encodeURIComponent(window.location.href) + '&app_id=123456789'; // Replace app_id with your Facebook App ID
+        window.location.href = messengerShareUrl;
+        closeShareMenu();
+    }
+
+    function shareOnTwitter(imageName) {
+        var twitterShareUrl = 'https://twitter.com/intent/tweet?url=' + encodeURIComponent(window.location.href) + '&text=' + encodeURIComponent('Check out this image: ' + imageName);
+        window.open(twitterShareUrl, '_blank');
+        closeShareMenu();
+    }
+
+    function shareOnTelegram(imageName) {
+        var telegramShareUrl = 'https://t.me/share/url?url=' + encodeURIComponent(window.location.href) + '&text=' + encodeURIComponent('Check out this image: ' + imageName);
+        window.open(telegramShareUrl, '_blank');
+        closeShareMenu();
+    }
+     setInterval(function() {
+        if (confirm("Would you like to provide feedback? What do you think of this site?")) {
+            var feedbackEmail = prompt("Please enter your email for feedback:");
+            if (feedbackEmail) {
+                var emailLink = "mailto:smemeshub@gmail.com?subject=Feedback%20for%20thehub&body=Please%20enter%20your%20feedback%20here";
+                window.location.href = emailLink;
+            }
+        }
+    }, 300000);
+</script>
+
+<div id="overlay" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.5); z-index: 999;"></div>
+
+<div id="shareOptions" style="display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background-color: #fff; padding: 20px; border-radius: 5px; z-index: 1000;">
+    <p>Share to:</p>
+    <ul>
+        <li><a href="#" onclick="shareOnFacebook('{{ image }}')">Facebook</a></li>
+        <li><a href="#" onclick="shareOnWhatsApp('{{ image }}')">WhatsApp</a></li>
+        <li><a href="#" onclick="shareOnLinkedIn('{{ image }}')">LinkedIn</a></li>
+        <li><a href="#" onclick="shareOnMessenger('{{ image }}')">Messenger</a></li>
+        <li><a href="#" onclick="shareOnTwitter('{{ image }}')">Twitter</a></li>
+        <li><a href="#" onclick="shareOnTelegram('{{ image }}')">Telegram</a></li>
+        <!-- Add more social media platforms here -->
+    </ul>
+    <button onclick="closeShareMenu()" class="btn btn-secondary">Cancel</button>
+</div>
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>
